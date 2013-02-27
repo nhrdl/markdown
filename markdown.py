@@ -4,11 +4,14 @@ import gtk
 import glib
 import webkit 
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.parse_args()
+
+
 idle_index = ""
 
-def idleHookFunction():
-    view.execute_script("alert(\"Hello world\");");
-    
+
 view = webkit.WebView()
 sw = gtk.ScrolledWindow() 
 sw.add(view) 
@@ -21,8 +24,8 @@ sw.set_size_request(900, 900)
 
 win.show_all() 
 win.connect("delete-event", gtk.main_quit)
-view.open("file:///home/niranjan/work/proto/markdown/test.html");
+view.open("file:///home/niranjan/work/markdown/test.html");
 win.maximize()
-idle_index=glib.idle_add(idleHookFunction)
+#idle_index=glib.idle_add(idleHookFunction)
 gtk.main()
 
