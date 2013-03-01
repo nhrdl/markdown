@@ -3,11 +3,12 @@
 import gtk
 import glib
 import webkit 
-
+import os;
 import argparse
 parser = argparse.ArgumentParser()
-parser.parse_args()
-
+parser.add_argument("file", help="Markdown file")
+args = parser.parse_args()
+print "File ", os.path.abspath(args.file)
 
 idle_index = ""
 
@@ -33,7 +34,7 @@ vbox.add(sw)
 
 win.show_all() 
 win.connect("delete-event", gtk.main_quit)
-view.open("file:///home/niranjan/work/markdown/markdown.html");
+view.open("file://" + os.path.abspath(args.file))
 win.maximize()
 #idle_index=glib.idle_add(idleHookFunction)
 gtk.main()
