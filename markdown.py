@@ -12,20 +12,34 @@ from gi.repository import Gtk
 class MarkdownFile:
     def __init__(self, path):
         self.filePath = path
+
+    def save(self, webview):
+        element = self.getTextElement(webview)
+        text = element.get_value()
+        open(self.filePath, "w").write(text)
         
+    def getTextElement(self, frame):
+        doc = frame.get_dom_document()
+        element = doc.get_element_by_id("wmd-input")
+        return element
+
     def load(self, webview, frame):
-        print "Loads the file "
+        """
+        Loads the file from disk if it exists and sets up the value in the html page.
+        """
         text = ""
         if (os.path.exists(self.filePath)):
             text = open(self.filePath).read()
             
-        doc = frame.get_dom_document()
-        element = doc.get_element_by_id("wmd-input")
+        element = self.getTextElement(webview)
         element.set_value(text)
-        print "Value set", element
 
         
 class App:
+    def save(self, arg):
+        """"Saves the file to the disk"""
+        self.view.mdFile.save(self.view);
+    
     def __init__(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("file", help="Markdown file")
@@ -35,6 +49,7 @@ class App:
         toolbar = Gtk.Toolbar()
         #toolbar.set_style(Gtk.ToobarStyle.GTTOOLBAR_ICONS)
         savetb = Gtk.ToolButton(Gtk.STOCK_SAVE)
+        savetb.connect("clicked", self.save)
         sep = Gtk.SeparatorToolItem()
         quittb = Gtk.ToolButton(Gtk.STOCK_QUIT)
         toolbar.insert(savetb, 0)
